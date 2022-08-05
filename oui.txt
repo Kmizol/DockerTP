@@ -1,0 +1,34 @@
+version: '3.9'
+services:
+  php:
+    container_name: php
+    image: php:latest
+    working_dir: /home/php/app
+    command:
+      - /bin/sh
+    ports:
+      - "9000:9000"
+    networks:
+      - monReseau
+  mysql:
+    image: 'mysql:latest'
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    networks:
+      - monReseau     
+  phpmyadmin:
+    container_name: BDD_MySQL
+    image: phpmyadmin:latest  
+    ports:
+      - 8080:80
+    environment:
+      - PMA_HOST:mysql
+    depends_on:
+      - mysql
+    volumes:
+      - ./docker/phpmyadmin
+    networks:
+      - monReseau     
+networks:
+  monReseau:
+    driver: bridge
