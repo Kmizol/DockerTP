@@ -1,5 +1,3 @@
-create database test;
-
 use test;
 
 CREATE TABLE `users` (

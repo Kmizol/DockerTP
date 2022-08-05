@@ -18,14 +18,15 @@ services:
     container_name: db
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD : 'oui'
-      MYSQL_DATABASE: 'test'
-      PMA_USER : 'leuseur'
-      PMA_PASSWORD : 'lepassword'
+      MYSQL_ROOT_PASSWORD : ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER : ${DB_USER}
+      MYSQL_PASSWORD : ${DB_USER_PASSWORD}
     ports:
       - "6033:3306"
     volumes:
       - dbdata:/var/lib/mariadb
+      - ./init:/docker-entrypoint-initdb.d
     networks:
       - bdd-php
       - php-mysql

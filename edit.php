@@ -29,8 +29,9 @@ if(isset($_POST['update']))
 		//updating the table
 		$result = mysqli_query($mysqli, "UPDATE users SET name='$name',age='$age',email='$email' WHERE id=$id");
 		
-		//redirectig to the display page. In our case, it is index.php
-		header("Location: index.php");
+		//display edit message
+		echo "<font color='green'>Data edited successfully.";
+		echo "<br/><a href='index.php'>View Result</a>";
 	}
 }
 ?>
@@ -40,6 +41,8 @@ $id = $_GET['id'];
 
 //selecting data associated with this particular id
 $result = mysqli_query($mysqli, "SELECT * FROM users WHERE id=$id");
+
+
 
 while($res = mysqli_fetch_array($result))
 {
