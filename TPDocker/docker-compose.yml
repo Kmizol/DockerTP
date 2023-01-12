@@ -1,0 +1,55 @@
+version: '3'
+ 
+services:
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: php73
+    depends_on:
+      - db
+    image: php:latest-apache
+    ports:
+      - 80:80
+    networks:
+      - php-mysql
+  db:
+    image: mariadb
+    container_name: db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD : ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER : ${DB_USER}
+      MYSQL_PASSWORD : ${DB_USER_PASSWORD}
+    ports:
+      - "6033:3306"
+    volumes:
+      - dbdata:/var/lib/mariadb
+      - ./init:/docker-entrypoint-initdb.d
+    networks:
+      - bdd-php
+      - php-mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: pma
+    links:
+      - db
+    environment:
+      PMA_HOST: 'db'
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+      
+    restart: always
+    ports:
+      - 8080:80
+    networks:
+      - bdd-php
+volumes:
+  dbdata:
+networks:
+  bdd-php:
+    driver: bridge
+  php-mysql:
+    driver: bridge
